@@ -22,16 +22,41 @@ const setting = {
     speed: 3
 };
 
-function startGame(){
+function startGame() {
     start.classList.add('hide');
+
+    for (let i = 0; i < 20; i++){
+        const line = document.createElement('div');
+        line.classList.add('line');
+        line.style.top = (i*75) + 'px';
+        line.y = i*75;
+        gameArea.appendChild(line);
+    }
+
     setting.start = true;
     gameArea.appendChild(car);
+    setting.x = car.offsetLeft;
+    setting.y = car.offsetTop;
     requestAnimationFrame(playGame);
 }
 
 function playGame(){
-    console.log('Play Game');
     if (setting.start) {
+        moveRoad();
+        if (keys.ArrowLeft && setting.x > 3) {
+            setting.x-= setting.speed; 
+        }
+        if (keys.ArrowRight && setting.x < gameArea.offsetWidth - car.offsetWidth - 5) {
+            setting.x+=setting.speed; 
+        }
+        if (keys.ArrowDown && setting.y < gameArea.offsetHeight - car.offsetHeight - 5) {
+            setting.y+=setting.speed;
+        }
+        if (keys.ArrowUp && setting.y > 3) {
+            setting.y-=setting.speed;
+        }
+        car.style.left = setting.x + 'px';
+        car.style.top = setting.y + 'px';
         requestAnimationFrame(playGame);
     }
 }
@@ -45,4 +70,16 @@ function startRun(event){
 function stopRun(event){
     event.preventDefault();
     keys[event.key] = false;
+}
+
+function moveRoad() {
+    let lines = document.querySelectorAll('.line');
+    lines.forEach(function(line){
+        line.y += setting.speed;
+        line.style.top = line.y + 'px';
+
+        if(line.y >= document.documentElement.clientHeight) {
+            line.y = -75;
+        }
+    });
 }
