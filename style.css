@@ -50,7 +50,7 @@ table {
     display: none;
 }
 
-.car {
+.car, .enemy{
     width: 50px;
     height: 100px;
     background: transparent url('./image/my_car.png') center / cover no-repeat;
